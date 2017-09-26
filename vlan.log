@@ -5,3 +5,7 @@ I, [2017-09-10T03:55:05.488307 #5740]  INFO -- : 10.1.10.3 is busy now by erickd
 E, [2017-09-10T03:55:27.590014 #5742] ERROR -- : erick doesn't exists in configuration file
 I, [2017-09-10T03:56:14.939106 #5784]  INFO -- : The ip address 192.168.0.1 of vlan erick were added in configuration file by erickdavi@gmail.com
 I, [2017-09-10T03:56:43.320674 #5788]  INFO -- : 192.168.0.1 removed by erickdavi@gmail.com
+I, [2017-09-26T01:02:29.254910 #5633]  INFO -- : The ip address 10.10.0.1 of vlan erick were added in configuration file by erickdavi@gmail.com
+I, [2017-09-26T01:03:26.932764 #5651]  INFO -- : 10.10.0.1 is busy now by erickdavi@gmail.com
+I, [2017-09-26T01:04:07.116705 #5659]  INFO -- : 10.10.0.1 is free now by erickdavi@gmail.com
+I, [2017-09-26T01:04:31.286702 #5670]  INFO -- : 10.10.0.1 removed by erickdavi@gmail.com

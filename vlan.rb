@@ -1,10 +1,11 @@
 #!/usr/local/bin/ruby
 require 'logger'
 class Vlan
-	attr_accessor :conf_file, :log_file
-	def initialize(conf_file, log_file)
+	attr_accessor :conf_file, :log_file, :email
+	def initialize(conf_file, log_file, email)
 		@conf_file = conf_file
 		@log_file = log_file
+		@email = email
 		if File.exist?(conf_file)
 			@hashfile = []
 			File.open(@conf_file, 'r') do |file|
@@ -39,7 +40,7 @@ class Vlan
 			out = {exists: false, status: nil,indx: nil}
 		end
 	end
-	def change_status(action, ip, email)
+	def change_status(action, ip)
 		ip_query = self.test_ip(ip)
 		@stat = ip_query[:status]
 		if ip_query[:exists] == true
@@ -55,10 +56,10 @@ class Vlan
 				if ip_query[:status] != @stat
 					@hashfile[ip_query[:indx]][:status] = @stat
 					File.new(@conf_file,'w').puts(format_cachefile)
-					@log.info("#{ip} is #{@stat} now by #{email}")
+					@log.info("#{ip} is #{@stat} now by #{@email}")
 					out = "#{ip} is #{@stat} now"
 				else
-					@log.error("Configuration not change - #{email}")
+					@log.error("Configuration not change - #{@email}")
 					out = "Configuration not change"
 				end
 			else
@@ -70,30 +71,30 @@ class Vlan
 			out = "#{ip} doesn't exists in configuration file"
 		end
 	end
-	def newip(vlan, ip, email)
+	def newip(vlan, ip)
 		ip_query = self.test_ip(ip)
 		if !(ip_query[:exists]) and ((vlan.class != NilClass) and (ip.class != NilClass))
 			line = "#{vlan}:#{ip}:free"
 			File.new(@conf_file,'a').puts(line)
-			@log.info("The ip address #{ip} of vlan #{vlan} were added in configuration file by #{email}")
+			@log.info("The ip address #{ip} of vlan #{vlan} were added in configuration file by #{@email}")
 			out = "The ip address #{ip} of vlan #{vlan} were added in configuration file"
 		else
 			@log.error("No change in configuration file")
 			out = "No change in configuration file"
 		end
 	end
-	def rmip(ip, email)
+	def rmip(ip)
 		ip_query = self.test_ip(ip)
 		if ip_query[:exists] and @hashfile[ip_query[:indx]][:status] == "free"
 			@hashfile.delete_at(ip_query[:indx])
 			File.new(@conf_file,'w').puts(format_cachefile)
-			@log.info("#{ip} removed by #{email}")
+			@log.info("#{ip} removed by #{@email}")
 			out = "Done"
 		elsif @hashfile[ip_query[:indx]][:status] == "busy"
-			@log.error("This ip address is busy - #{email}")
+			@log.error("This ip address is busy - #{@email}")
 			out = "This ip address is busy"
 		else
-			@log.error("Ip doesn't exists or their status is Invalid - #{email}")
+			@log.error("Ip doesn't exists or their status is Invalid - #{@email}")
 			out = "Ip doesn't exists or their status is Invalid"
 		end
 	end

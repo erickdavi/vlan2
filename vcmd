@@ -1,0 +1,39 @@
+#!/usr/bin/ruby
+
+require 'thor'
+require './vlan.rb'
+
+conf_file = "vlan.conf"
+log_file = "vlan.log"
+email = "erickdavi@gmail.com"
+
+@@vl = Vlan.new(conf_file, log_file, email)
+
+
+class VCMD < Thor
+	desc "request [vacate|use] ip", "Change the status of IP address\n "
+	def request(action, ip)
+		response = @@vl.change_status(action, ip)
+		puts response				
+	end
+	
+	desc "include [vlan] [ip]", "Include a new ip to vlan"
+	def include(vlan, ip)
+		response = @@vl.newip(vlan, ip)
+		puts response
+	end
+
+	desc "remove [ip]", "Remove ip by configuration file"
+	def remove(ip)
+		response = @@vl.rmip(ip)
+		puts response				
+	end
+
+	desc "list", "List all ip address"
+	def list
+		response = @@vl.lsip()
+		puts response
+	end
+end
+
+VCMD.start(ARGV)
